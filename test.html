@@ -1,0 +1,47 @@
+
+
+<body>
+    <p>say hello</p>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script>
+
+
+//Width and height
+var w = 500;
+var h = 100;
+var barPadding = 2;
+
+var dataset = [ 5, 10, 13, 19, 21, 25, 22, 18, 15, 13,
+                 18, 17, 16, 18, 23, 25 ];
+
+//Create SVG element
+var svg = d3.select("body")
+            .append("svg")
+            .attr("width", w)
+            .attr("height", h);
+
+svg.selectAll("rect")
+   .data(dataset)
+   .enter()
+   .append("rect")
+   .attr("x", 0)
+   .attr("y", function(d) {
+        return h - d*4;  //Height minus data value
+   })
+   .attr("width", w / dataset.length - barPadding)
+   .attr("x", function(d, i) {
+        return i * (w / dataset.length);
+    })
+   .attr('transform', 'translate(0, 100)')
+   .transition()
+   .delay(function(d, i) {
+        return i * 50;
+   })
+   .duration(dataset.length * 50)
+   .attr('transform', 'translate(0, 0)')
+   .attr("height", function(d) {
+        return (d * 4);  // <-- Times four!
+   });
+
+</script>
+</body>
