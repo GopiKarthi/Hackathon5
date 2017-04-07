@@ -1,0 +1,11 @@
+/*CSS files */
+.bar_line {
+    width: 20px;
+    background-color: blue;
+    display: inline-block;
+}
+.line {
+  fill: none;
+  stroke: #000;
+  stroke-width: 1.5px;
+}
