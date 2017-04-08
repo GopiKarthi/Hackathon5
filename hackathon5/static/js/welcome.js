@@ -200,20 +200,28 @@ function create_year_screen(callback){
         setTimeout(function () {
             start(y+1); 
         }, 2000);     
-            //clear_title();
-            //clear_screen();
-            //clear_flow();
-                start(y+1);
-        }, 2000);
     }
     create_svgs();
     start(y = 2009, callback);
     //create_map_screen();
     
 }
-
-function create_map_screen() {
-    d3.selectAll('svg').remove();
+function base_map(callback) {
+var callback = callback
+function iter_map(year) {
+    if (year>2016) {
+        callback();
+        return
+    }
+    create_map_screen(year);
+    setTimeout(function () {
+        iter_map(year+1);
+    }, 10000);
+}
+iter_map(year=2009,callback);
+}
+function create_map_screen(year) {
+    d3.selectAll('.max-container').remove();
     var base_container = d3.select('body').append('div').attr('class','max-container');
     var mapcontainer = base_container.append('div').attr('class','mapcontainer');
     mapcontainer.append('div').attr('class','map');
@@ -225,11 +233,11 @@ function create_map_screen() {
                     name: "united_kingdom"
                 }
             });
-            var svg = d3.select("svg");
+            var svg = d3.select("svg").attr('width','1000').attr('height','1400');
             $.ajax({
         url:'/api/map-points/',
             type:'GET',
-            data:{'year':'2016'},
+            data:{'year':year},
             success: function(data)
             {
                 var data = JSON.parse(data);
@@ -240,6 +248,7 @@ function create_map_screen() {
                 svg.append('text').text('Male Customers').attr('x','60').attr('y','1171');
                 svg.append('text').text('Female Customers').attr('x','60').attr('y','1210');
                 svg.append('rect').attr('x','10').attr('y','1105').attr('width','235').attr('height','150').attr('fill','none').attr('stroke','black');
+                svg.append('text').text(year).attr('x','445').attr('y','120').style('font-size','52px').style('color','blue');
         }
         });
         
@@ -264,7 +273,7 @@ setTimeout(function () {
 
 
 setTimeout(function () {
-    create_year_screen(create_map_screen);
+    create_year_screen(base_map);
 }, 3000);
 
 /*
