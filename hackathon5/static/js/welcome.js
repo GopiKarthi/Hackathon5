@@ -10,7 +10,7 @@ function say_welcome(){
 
     var welcome_wrap = svg.append('g')
                             .attr('id', 'WelcomeWrap');
-    
+
     var mylabel = welcome_wrap.append('text')
                     .attr('x', base_width/2)
                     .attr('y', -5)
@@ -30,7 +30,7 @@ function say_welcome(){
                         .transition()
                         .duration(2000)
                         .attr('opacity', 1);
-                    
+
 
 
 }
@@ -48,26 +48,38 @@ function hide_welcome(){
 
 
 
-function create_year_screen (){
+function create_year_screen(callback){
 
-   d3.select('svg').remove();
-   var cont = d3.select('body').append('div')
+    var callback = callback
+    console.log(callback)
+    console.log('working')
+    var cont = d3.select('body').append('div')
                     .attr('class', 'max-container');
 
-   var svg_title = cont.append('svg')
-                    .attr('id', 'svgTitle');
+    var svg_title;
+    var svg_screen;
+    var svg_review;
+    var year_title;
 
-   var svg_screen = cont.append('svg')
+    function create_svgs(){
+
+        d3.select('svg').remove();
+
+        svg_title = cont.append('svg')
+                    .attr('id', 'svgTitle');
+        year_title = svg_title.append('g')
+                            .attr('id', 'YearTitle');
+
+        svg_screen = cont.append('svg')
                     .attr('id', 'svgScreen')
                     .attr('float', 'left');
 
 
-   var svg_review = cont.append('svg')
+        svg_review = cont.append('svg')
                     .attr('id', 'svgReview');
 
-    
-    function customer_flow(){
-
+    }
+    function customer_flow(y){
     // set the dimensions and margins of the graph
     var margin = {top: 20, right: 20, bottom: 30, left: 50},
     width = 960 - margin.left - margin.right,
@@ -84,12 +96,18 @@ function create_year_screen (){
     var valueline = d3.line()
     .curve(d3.curveBasis)
     .x(function(d) { return x(d.date); })
-    .y(function(d) { return y(d.close); });
+    .y(function(d) { return y(d.Loans); });
 
     // append the svg obgect to the body of the page
     // appends a 'group' element to 'svg'
     // moves the 'group' element to the top left margin
     //var svg = d3.select("body").append("svg")
+
+    d3.request('/api/cust_data/?y='+y, function(error, response) {
+    // Now use response to do some d3 magic
+        if (error) throw error;
+
+    d3.select('#svgReview').selectAll('g').remove()
     svg = d3.select('#svgReview')
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
@@ -97,20 +115,17 @@ function create_year_screen (){
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")");
 
-    d3.request('/api/cust_data/', function(error, response) {
-    // Now use response to do some d3 magic
-        if (error) throw error;
     // format the data
     data  = JSON.parse(response.response)
-    console.log(data);
     data.forEach(function(d) {
       d.date = parseTime(d.date);
-      d.close = +d.close;
+      d.Loans = +d.Loans;
     });
 
     // Scale the range of the data
     x.domain(d3.extent(data, function(d) { return d.date; }));
-    y.domain([0, d3.max(data, function(d) { return d.close; })]);
+    y.domain([0, d3.max(data, function(d) { return d.Loans; })]);
+
 
     // Add the valueline path.
     svg.append("path")
@@ -129,27 +144,35 @@ function create_year_screen (){
 
     });
     }
-    function title(){
+    function title(text){
 
-    var year_title = svg_title.append('g')
-                            .attr('id', 'YearTitle');
+       year_title.selectAll('text').transition()
+                                .duration(500)
+                                .attr('y', 0)
+                                .remove();
 
-    var mylabel = year_title.append('text')
+        year_title.append('text')
                     .attr('x', 200 )
-                    .attr('y', 70)
+                    .attr('y', 200)
                     .attr('text-anchor', 'middle')
                     .attr('font-size', '30px')
                     .attr('class', 'title_text')
-                    .attr('opacity', 0)
-                    .text('2009')
-                            .transition()
-                                .duration(2000)
-                                .attr('opacity', 1);
+                    .text(text)
+                        .transition()
+                        .duration(1000)
+                        .attr('y','70');
 
     }
 
 
-    function screen(){
+    function screen(y){
+
+        svg_screen.selectAll('image')
+                    .transition()
+                    .duration(2000)
+                    .attr('opacity', 0)
+                    .remove();
+
         svg_screen.append("image")
                     .attr('xlink:href', '/static/img/screen_2009.jpg')
                     .attr('x', 5)
@@ -158,18 +181,34 @@ function create_year_screen (){
                         .transition()
                         .duration(2000)
                         .attr('opacity', 1);
-        
+
     }
 
-    
-    title();
-    screen();
-    customer_flow();
+
+
+    function start(y){
+        if(y > 2017){
+            console.log(callback);
+            callback();
+            return
+        }
+        //create_svgs();
+        title(y);
+        screen(y);
+        customer_flow(y);
+
+        setTimeout(function () {
+            start(y+1); 
+        }, 2000);     
+    }
+    create_svgs();
+    start(y = 2009, callback);
+    //create_map_screen();
     
 }
 
 function create_map_screen() {
-    d3.select('svg').remove();
+    d3.selectAll('svg').remove();
     var base_container = d3.select('body').append('div').attr('class','max-container');
     var mapcontainer = base_container.append('div').attr('class','mapcontainer');
     mapcontainer.append('div').attr('class','map');
@@ -218,12 +257,12 @@ setTimeout(function () {
     hide_welcome();
 }, 3000);
 
-/*
-setTimeout(function () {
-    create_year_screen();
-}, 3000);
-*/
 
+setTimeout(function () {
+    create_year_screen(create_map_screen);
+}, 3000);
+
+/*
 setTimeout(function () {
     create_map_screen();
 }, 3000);
@@ -231,3 +270,4 @@ setTimeout(function () {
 setTimeout(function () {
     delete_map_screen();
 }, 10000);
+*/
