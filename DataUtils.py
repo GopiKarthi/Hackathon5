@@ -1,3 +1,7 @@
+import pandas
+from pandas import DataFrame
+import pickle
+from pickle import *
 from utilities import dbconnect
 import datetime
 conTMS=dbconnect("TMS_Data")
@@ -22,24 +26,33 @@ def last_day_of_month(any_day):
     return next_month - datetime.timedelta(days=next_month.day)
 
 def CustMothlyData(year=2009):
-    for month in range(1,12):
+    for month in range(1,13):
 		dict={}
 		dateYYYYMM = last_day_of_month(datetime.date(year, month, 1))
-		# import pdb;pdb.set_trace()
 		selectMonth = str(dateYYYYMM.strftime("%Y-%m"))+"%"
-		query = ("select count(*) from GetProposal where Decision='Active' and CurrentDateTime like '%s'"%selectMonth)
-		# print query
+		query = ("select count(*) as Loans from GetProposal where Decision='Active' and CurrentDateTime like '%s'"%selectMonth)
+		# q1 = "select count(Decision)as Loans,CurrentDateTime as DateTime from GetProposal where Decision='Active' and CurrentDateTime like '%s'"%selectMonth
+		# # print query
+		# d = con.fetch_df(q1)
 		count = float(conUKLSOFT.fetch_one(query)[0])
 		dict['startdate']=datetime.date(year, month, 1).strftime("%d-%b-%y")
 		dict['date']=dateYYYYMM.strftime("%d-%b-%y")
 		dict['Loans']=count
 		print "%s till %s Loans %s"%(datetime.date(year, month, 1).strftime("%d-%b-%y"),dateYYYYMM.strftime("%d-%b-%y"),count)
 		MonthlyLoans.append(dict)
-	return MonthlyLoans
+    import pdb;pdb.set_trace()
+    with open("LoanBooked_"+dateYYYYMM.strftime("%Y")+".pkl","wb") as f:
+        pickle.dump(MonthlyLoans, f)
+    with open("LoanBooked_"+dateYYYYMM.strftime("%Y")+".pkl", 'rb') as f:
+        points = pickle.load(f)
+    return MonthlyLoans
+
 
 
 
 # ProfitYearly()
 # print YearProfit
-CustMothlyData()
-print MonthlyLoans
+for i in range(2009,2018):
+	print "==============================================Year================================================",i
+	CustMothlyData(i)
+#print MonthlyLoans
