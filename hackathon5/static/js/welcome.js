@@ -168,14 +168,66 @@ function create_year_screen (){
     
 }
 
-/*
+function create_map_screen() {
+    d3.select('svg').remove();
+    var base_container = d3.select('body').append('div').attr('class','max-container');
+    var mapcontainer = base_container.append('div').attr('class','mapcontainer');
+    mapcontainer.append('div').attr('class','map');
+
+    $(function () {
+            $(".mapcontainer").mapael({
+                map: {
+                    // Set the name of the map to display
+                    name: "united_kingdom"
+                }
+            });
+            var svg = d3.select("svg");
+            $.ajax({
+        url:'/api/map-points/',
+            type:'GET',
+            data:{'year':'2016'},
+            success: function(data)
+            {
+                var data = JSON.parse(data);
+                svg.selectAll('circle').data(data.coords).enter().append('circle').attr('cx',function(d) { return d[0];}).attr('cy',function(d) { return d[1];}).attr('r','0').attr('fill',function(d) {if (d[3]=='Male'){return "#00aeef";} else {return "#8dc63f";}}).attr('stroke',function(d) {if (d[3]=='Male'){return "navy";} else {return "olive";}}).transition().delay(function(d,i){ return 100*i; }).duration(500).attr('r','10').transition().delay(function(d,i){ return 100*i; }).duration(100).attr('r','5');
+                svg.append('circle').attr('fill','#00aeef').attr('stroke','navy').attr('r','5').attr('cx','40').attr('cy','1166');
+                svg.append('circle').attr('fill','#8dc63f').attr('stroke','olive').attr('r','5').attr('cx','40').attr('cy','1204');
+                svg.append('text').text('LEGEND').attr('x','83').attr('y','1140');
+                svg.append('text').text('Male Customers').attr('x','60').attr('y','1171');
+                svg.append('text').text('Female Customers').attr('x','60').attr('y','1210');
+                svg.append('rect').attr('x','10').attr('y','1105').attr('width','235').attr('height','150').attr('fill','none').attr('stroke','black');
+        }
+        });
+        
+        });
+
+}
+
+function delete_map_screen() {
+    d3.select('.mapcontainer')
+        .attr('opacity', 1)
+        .transition()
+        .duration(2000)
+            .attr('opacity', 0)
+        .remove();
+}
+
 say_welcome();
 
 setTimeout(function () {
     hide_welcome();
 }, 3000);
 
-*/
-//setTimeout(function () {
+/*
+setTimeout(function () {
     create_year_screen();
-//}, 3000);
+}, 3000);
+*/
+
+setTimeout(function () {
+    create_map_screen();
+}, 3000);
+
+setTimeout(function () {
+    delete_map_screen();
+}, 10000);
