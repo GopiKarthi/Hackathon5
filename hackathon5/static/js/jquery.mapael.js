@@ -2125,13 +2125,13 @@
                 },
                 defaultArea: {
                     attrs: {
-                        fill: "#343434",
+                        fill: "#ffffff",
                         stroke: "#5d5d5d",
                         "stroke-width": 1,
                         "stroke-linejoin": "round"
                     },
                     attrsHover: {
-                        fill: "#f38a03",
+                        fill: "#ffffff",
                         animDuration: 300
                     },
                     text: {
@@ -2251,7 +2251,7 @@
                 marginBottom: 10,
                 titleAttrs: {
                     "font-size": 16,
-                    fill: "#343434",
+                    fill: "#ffffff",
                     "text-anchor": "start"
                 },
                 labelAttrs: {
