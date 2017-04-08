@@ -4,6 +4,8 @@ import MySQLdb
 from config import *
 from pickle import *
 from datetime import datetime
+from netaddr import *
+from itertools import izip
 
 class dbconnect(object):
     def __init__(self,db="ukllis"):
@@ -25,39 +27,28 @@ class dbconnect(object):
 
 def plot_points(IPs,ip_data):
     plot_points = []
-    for i,j in IPs['IPAddr'].iteritems():
-        input_ip = ''
-        x = j.split('.')
-        for p in x:
-            input_ip = input_ip + "%03d"%int(p)
-        input_ip = int(input_ip)
-        for m,n in ip_data['ip_start'].iteritems():
-            y = ip_data['ip_start'][m].split('.')
-            z = ip_data['ip_end'][m].split('.')
-            start_ip = ''
-            end_ip = ''
-            for p in xrange(len(y)):
-                start_ip = start_ip + "%03d"%int(y[p])
-                end_ip = end_ip + "%03d"%int(z[p])
-            start_ip = int(start_ip)
-            end_ip = int(end_ip)
-            if start_ip < input_ip and input_ip < end_ip:
-                plot_points.append([ip_data['latitude'][m],ip_data['longitude'][m],IPs['ApplicationDate'][i],IPs['Title'][i],IPs['ReqLoanAmt'][i],IPs['LeadID'][i]])
-                #print "Plotting:",ip_data['latitude'][m],", ",ip_data['longitude'][m],"\n"
-                print IPs['LeadID'][i]
+    for i,j in enumerate(IPs.itertuples(index=True),1):
+        input_ip = int(IPAddress(j[1]))
+        for m,n in enumerate(ip_data.itertuples(index=True),1):
+            start_ip = int(IPAddress(n[1]))
+            end_ip = int(IPAddress(n[2]))
+            if start_ip < input_ip < end_ip:
+                plot_points.append([n[8],n[9],j[1],j[2],j[3],j[4]])
+                print j[5]
                 break
     return plot_points
 
 def get_coordinates(points):
+    print points
     xfactor = 67.38768718802
     xoffset = 737.46256239601
     yfactor = -115.3701968135
     yoffset = 7021.9709465792
     coords = []
     for i in points:
-        x = (i[1] * xfactor) + xoffset
-        y = (i[0] * yfactor) + yoffset;
-        coords.append([x,y,i[2],'Male' if i[3]=='Mr' else 'Female',i[4],i[5]])
+        x = (float(i[1]) * xfactor) + xoffset
+        y = (float(i[0]) * yfactor) + yoffset;
+        coords.append([x,y,i[3],'Male' if i[4]=='Mr' else 'Female',i[5]])
     return coords
 
 if __name__ == '__main__':

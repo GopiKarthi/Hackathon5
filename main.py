@@ -15,11 +15,12 @@ con = dbconnect()
 con = dbconnect("ukllis")
 try:
     print "Getting Cres data from pickle"
-    IPs = pandas.read_pickle("IPs_pick_200901.pkl")
+    IPs = pandas.read_pickle("IPs_pick_200912.pkl")
 except:
     print "Getting Cres data from db"
-    IPs = con.fetch_df("select IPAddr,ApplicationDate,Title,ReqLoanAmt,LeadID from ClientRequest where LeadID>'2009012' and LeadID<'201001';")
-    IPs_pick = IPs.to_pickle("IPs_pick_200901.pkl")
+    #IPs = con.fetch_df("select IPAddr,ApplicationDate,Title,ReqLoanAmt,LeadID from ClientRequest limit 5;")
+    IPs = con.fetch_df("select creq.IPAddr,creq.ApplicationDate,creq.Title,creq.ReqLoanAmt,creq.LeadID from ClientRequest as creq,application_agreement as app where app.id=creq.LeadID and creq.LeadID>'200912' and creq.LeadID<'201001' and app.stdSign='on';")
+    IPs_pick = IPs.to_pickle("IPs_pick_200912.pkl")
 print "IP list got"
 try:
     print "Getting IP data from pickle"
@@ -33,13 +34,13 @@ ip_data = ip_data[ip_data['ip_start'].str.match('(.*\..*)').str.len() > 0]
 print "Data cleaned"
 try:
     print "Getting points from pickle"
-    with open('points_200901.pkl', 'rb') as f:
+    with open('points_200912.pkl', 'rb') as f:
         points = pickle.load(f)
     #points = pandas.read_pickle("points.pkl")
 except:
     print "Manually comparing and getting IP mapping"
     points = plot_points(IPs,ip_data)
-    with open("points_200901.pkl","wb") as f:
+    with open("points_200912.pkl","wb") as f:
         pickle.dump(points, f)
     #points_pick = points.to_pickle("points.pkl")
 print "Scaling the coordinates"
