@@ -5,6 +5,7 @@ from config import *
 from pickle import *
 from netaddr import *
 from itertools import izip
+import datetime
 
 import random
 import time
@@ -40,10 +41,8 @@ def plot_points(IPs,ip_data):
                         print j[5]
                         break
                 except:
-                    print "111111111111111111111"
                     pass
         except:
-            print "efwegwegwrgwefewg"
             pass
     return plot_points
 
@@ -57,7 +56,7 @@ def get_coordinates(points):
     for i in points:
         x = (float(i[1]) * xfactor) + xoffset
         y = (float(i[0]) * yfactor) + yoffset;
-        coords.append([x,y,i[3],'Male' if i[4]=='Mr' else 'Female',i[5]])
+        coords.append([x,y,datetime.datetime.strftime(i[3],'%d-%m-%Y'),'Male' if i[4]=='Mr' else 'Female',i[5]])
     return coords
 
 if __name__ == '__main__':
