@@ -2,8 +2,8 @@
 import json
 from datetime import datetime as dt
 from django.http import HttpResponse
-
-from util.db_util import dbconnect
+import pickle
+from util.util import *
 
 def AppRateReal(request):
     """To calculate and return the Application rate
@@ -20,4 +20,10 @@ def AppRateReal(request):
     dbconnect
 
     return HttpResponse(q)
-    
+
+def Map_Plot(request):
+    '''Sends the data to plot the map of customers applying in UK'''
+    with open('points_200901.pkl', 'rb') as f:
+        points = pickle.load(f)
+    coords = get_coordinates(points)
+    return coords
