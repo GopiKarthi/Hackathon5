@@ -4,6 +4,8 @@ import pickle
 from pickle import *
 from utilities import dbconnect
 import datetime
+import sys
+sys.path.append("/host/DataHack")
 conTMS=dbconnect("TMS_Data")
 conUKLSOFT=dbconnect("uklsoft")
 YearProfit = []
@@ -52,7 +54,13 @@ def CustMothlyData(year=2009):
 
 # ProfitYearly()
 # print YearProfit
-for i in range(2009,2018):
-	print "==============================================Year================================================",i
-	CustMothlyData(i)
+# for i in range(2009,2018):
+# 	print "==============================================Year================================================",i
+# 	CustMothlyData(i)
+datas=[]
+for year in range(2009,2018):
+	with open("/host/DataHack/LoanBooked_"+str(year)+".pkl", 'rb') as f:
+		import pdb;pdb.set_trace()
+		datas = pickle.load(f) + datas
+print datas
 #print MonthlyLoans

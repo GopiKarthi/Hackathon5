@@ -8,6 +8,8 @@ import pickle
 from util.util import *
 from hackathon5 import *
 import simplejson
+import sys
+sys.path.append("/host/DataHack")
 
 def AppRateReal(request):
     """To calculate and return the Application rate
@@ -24,20 +26,22 @@ def AppRateReal(request):
     dbconnect
 
     return HttpResponse(q)
-   
+
 
 
 def CustData(request):
-    data=[]
+    datas=[]
 
-    for i in range(40):
-        data.append({'date' : randomDate('1-Jan-16', '31-Dec-16', random.random()),
-                     'close' : (random.random() * 500 )})
+    # for i in range(10):
+    #     data.append({'date' : randomDate('1-Jan-16', '31-Dec-16', random.random()),
+    #                  'close' : (random.random() * 500 )})
+
+    for year in range(2009,int(request.GET.get("y"))+1):
+        with open("/host/DataHack/LoanBooked_"+str(year)+".pkl", 'rb') as f:
+            datas = pickle.load(f) + datas
+    return HttpResponse(json.dumps(datas))
 
 
-    return HttpResponse(json.dumps(data))
-        
-     
 
 def MapPlot(request):
     '''Sends the data to plot the map of customers applying in UK'''

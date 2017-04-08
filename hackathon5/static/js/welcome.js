@@ -10,7 +10,7 @@ function say_welcome(){
 
     var welcome_wrap = svg.append('g')
                             .attr('id', 'WelcomeWrap');
-    
+
     var mylabel = welcome_wrap.append('text')
                     .attr('x', base_width/2)
                     .attr('y', -5)
@@ -30,7 +30,7 @@ function say_welcome(){
                         .transition()
                         .duration(2000)
                         .attr('opacity', 1);
-                    
+
 
 
 }
@@ -95,7 +95,7 @@ function create_year_screen (){
     var valueline = d3.line()
     .curve(d3.curveBasis)
     .x(function(d) { return x(d.date); })
-    .y(function(d) { return y(d.close); });
+    .y(function(d) { return y(d.Loans); });
 
     // append the svg obgect to the body of the page
     // appends a 'group' element to 'svg'
@@ -118,12 +118,12 @@ function create_year_screen (){
     data.forEach(function(d) {
         console.log('in loop');
       d.date = parseTime(d.date);
-      d.close = +d.close;
+      d.Loans = +d.Loans;
     });
 
     // Scale the range of the data
     x.domain(d3.extent(data, function(d) { return d.date; }));
-    y.domain([0, d3.max(data, function(d) { return d.close; })]);
+    y.domain([0, d3.max(data, function(d) { return d.Loans; })]);
 
     svg.selectAll('path').remove();
 
@@ -181,11 +181,11 @@ function create_year_screen (){
                         .transition()
                         .duration(2000)
                         .attr('opacity', 1);
-        
+
     }
 
 
-    
+
     function start(y){
         if(y > 2017)
             return
@@ -193,13 +193,13 @@ function create_year_screen (){
         title(y);
         screen(y);
         customer_flow(y);
-        
+
         setTimeout(function () {
             //clear_title();
             //clear_screen();
             //clear_flow();
-                start(y+1); 
-        }, 2000);     
+                start(y+1);
+        }, 2000);
     }
     create_svgs();
     start(2009);
