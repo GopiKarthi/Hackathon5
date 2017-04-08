@@ -12,6 +12,8 @@ con = dbconnect()
 #print res
 #print con.fetch_df("select latitude,longitude from ip_db.dbip_lookup as ip, ukllis.ClientRequest as creq where ip.ip_start=creq.IPAddr limit 5;")
 #print con.fetch_df("select latitude,longitude from ip_db.dbip_lookup as ip, ukllis.ClientRequest as creq where creq.IPAddr='86.31.121.81';")
+from_date_pattern = '20091230'
+to_date_pattern='201001'
 con = dbconnect("ukllis")
 try:
     print "Getting Cres data from pickle"
@@ -21,6 +23,12 @@ except:
     #IPs = con.fetch_df("select IPAddr,ApplicationDate,Title,ReqLoanAmt,LeadID from ClientRequest limit 5;")
     IPs = con.fetch_df("select creq.IPAddr,creq.ApplicationDate,creq.Title,creq.ReqLoanAmt,creq.LeadID from ClientRequest as creq,application_agreement as app where app.id=creq.LeadID and creq.LeadID>'201012' and creq.LeadID<'201101' and app.stdSign='on';")
     IPs_pick = IPs.to_pickle("IPs_pick_201012.pkl")
+    IPs = pandas.read_pickle("IPs_pick_"+from_date_pattern+".pkl")
+except:
+    print "Getting Cres data from db"
+    #IPs = con.fetch_df("select IPAddr,ApplicationDate,Title,ReqLoanAmt,LeadID from ClientRequest limit 5;")
+    IPs = con.fetch_df("select creq.IPAddr,creq.ApplicationDate,creq.Title,creq.ReqLoanAmt,creq.LeadID from ClientRequest as creq,application_agreement as app where app.id=creq.LeadID and creq.LeadID>'%s' and creq.LeadID<'%s' and app.stdSign='on';"%(from_date_pattern,to_date_pattern))
+    IPs_pick = IPs.to_pickle("IPs_pick_"+from_date_pattern+".pkl")
 print "IP list got"
 try:
     print "Getting IP data from pickle"
@@ -35,12 +43,14 @@ print "Data cleaned"
 try:
     print "Getting points from pickle"
     with open('points_201012.pkl', 'rb') as f:
+    with open('points_'+from_date_pattern+'.pkl', 'rb') as f:
         points = pickle.load(f)
     #points = pandas.read_pickle("points.pkl")
 except:
     print "Manually comparing and getting IP mapping"
     points = plot_points(IPs,ip_data)
     with open("points_201012.pkl","wb") as f:
+    with open("points_"+from_date_pattern+".pkl","wb") as f:
         pickle.dump(points, f)
     #points_pick = points.to_pickle("points.pkl")
 print "Scaling the coordinates"
