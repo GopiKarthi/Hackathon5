@@ -2,8 +2,9 @@
 import json
 from datetime import datetime as dt
 from django.http import HttpResponse
+import random
 
-from util.db_util import dbconnect
+from util.util import dbconnect, randomDate
 
 def AppRateReal(request):
     """To calculate and return the Application rate
@@ -20,4 +21,17 @@ def AppRateReal(request):
     dbconnect
 
     return HttpResponse(q)
-    
+   
+
+
+def CustData(request):
+    data=[]
+
+    for i in range(40):
+        data.append({'date' : randomDate('1-JAN-16', '31-DEC-16', random.random()),
+                     'close' : (random.random() * 500 )})
+
+
+    return HttpResponse(json.dumps(data))
+        
+     

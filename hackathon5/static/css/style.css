@@ -8,3 +8,8 @@ svg{
     display: block;
     margin: auto;
 }
+
+.wel_text{
+    fill: #00aeef;
+    font-size: 70px
+}
