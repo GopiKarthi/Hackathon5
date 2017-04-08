@@ -200,6 +200,11 @@ function create_year_screen(callback){
         setTimeout(function () {
             start(y+1); 
         }, 2000);     
+            //clear_title();
+            //clear_screen();
+            //clear_flow();
+                start(y+1);
+        }, 2000);
     }
     create_svgs();
     start(y = 2009, callback);
