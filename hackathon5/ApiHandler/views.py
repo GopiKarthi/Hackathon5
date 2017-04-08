@@ -3,6 +3,7 @@ import json
 from datetime import datetime as dt
 from django.http import HttpResponse
 
+from util.db_util import dbconnect
 
 def AppRateReal(request):
     """To calculate and return the Application rate
@@ -15,6 +16,8 @@ def AppRateReal(request):
 
     #if req_type == 'all':
     q= """select count(*) from application_application where id like "%s%%";"""%dt.strftime(dt.now(),'%Y%d%m%H')
+
+    dbconnect
 
     return HttpResponse(q)
     
