@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Minimal example</title>
+    <style type="text/css">
+        body {
+            color: #5d5d5d;
+            font-family: Helvetica, Arial, sans-serif;
+        }
+
+        h1 {
+            font-size: 30px;
+            margin: auto;
+            margin-top: 50px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+    </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.min.js"
+            charset="utf-8"></script>
+    <script type="text/javascript" src="http://d3js.org/d3.v4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js" charset="utf-8"></script>
+    <script src="../media/js/jquery.mapael.js" charset="utf-8"></script>
+    <script src="../media/js/united_kingdom.js" charset="utf-8"></script>
+    <script type="text/javascript">
+        $(function () {
+            $(".mapcontainer").mapael({
+                map: {
+                    // Set the name of the map to display
+                    name: "united_kingdom"
+                }
+            });
+            var svg = d3.select("svg");
+        svg.selectAll('circle').data([['1081.8594751638002','716.3712271214675'],['1109.4329522022272','686.5342504159767'],['1082.4132521085057','736.9464468386057'],['1090.0161480785146','648.5276622296205'],['1073.9681537017568','617.531347753747'],['1078.3983692593947','732.6929158069917'],['1078.3983692593947','732.6929158069917'],['1078.3983692593947','732.6929158069917'],['968.012164948238','612.4159484193044'],['1085.7935988751406','746.7768885191381'],['1078.3983692593947','732.6929158069917'],['1070.1840112462742','736.6699147254609']]).enter().append('circle').attr('cx',function(d) { return d[1];}).attr('cy',function(d) { return d[0];}).attr('r','0').attr('fill','red').transition().delay(function(d,i){ return 100*i; }).duration(1000).attr('r','10').transition().delay(function(d,i){ return 100*i; }).duration(1000).attr('r','5');
+        });
+
+        
+    </script>
+    </head>
+
+<body>
+<div class="container">
+
+    <h1>United Kingdom</h1>
+
+    <div class="mapcontainer">
+        <div class="map">
+            <span></span>
+        </div>
+    </div>
+
+    <p></p>
+
+</div>
+
+<script type="text/javascript">
+
+
+</script>
+</body>
+</html>
