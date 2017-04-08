@@ -79,7 +79,7 @@ function create_year_screen(callback){
                     .attr('id', 'svgReview');
 
     }
-    function customer_flow(y){
+    function customer_flow(yr){
     // set the dimensions and margins of the graph
     var margin = {top: 20, right: 20, bottom: 30, left: 50},
     width = 960 - margin.left - margin.right,
@@ -103,7 +103,7 @@ function create_year_screen(callback){
     // moves the 'group' element to the top left margin
     //var svg = d3.select("body").append("svg")
 
-    d3.request('/api/cust_data/?y='+y, function(error, response) {
+    d3.request('/api/cust_data/?y='+yr, function(error, response) {
     // Now use response to do some d3 magic
         if (error) throw error;
 
@@ -174,7 +174,7 @@ function create_year_screen(callback){
                     .remove();
 
         svg_screen.append("image")
-                    .attr('xlink:href', '/static/img/screen_2009.jpg')
+                    .attr('xlink:href', '/static/img/screen_'+ y +'.jpg')
                     .attr('x', 5)
                     .attr('y', 5)
                     .attr('opacity', 0)
