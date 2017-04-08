@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.line, .line2 {
+  fill: none;
+  stroke: red;
+  stroke-width: 1.5px;
+}
+
+.line2{
+    stroke: green;
+}
+
+.bar--positive {
+  fill: steelblue;
+}
+
+.bar--negative {
+  fill: darkorange;
+}
+
+
+.bar--negativea {
+  fill: green;
+}
+
+.axis text {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+</style>
+<svg width="960" height="500"></svg>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script>
+var server_data2=[0.5,0.3,0.5,0.3,0.2,0.3,0.1,0.5,0.3];
+
+var dataset = [ 5, 100, 13, 19, 21, 25, 22, 18, 15, 13,
+                 18, 17, 16, 18, 23];
+var data2 = server_data2;
+function random()
+{
+  return Math.floor((Math.random()*50)+1);
+}
+
+var svg = d3.select("svg"),
+    margin = {top: 20, right: 20, bottom: 20, left: 40},
+    width = +svg.attr("width") - margin.left - margin.right,
+    height = +svg.attr("height") - margin.top - margin.bottom,
+    g = svg.append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+
+var x = d3.scaleLinear()
+    .domain([1, 5])
+    .range([0, width]);
+
+var y = d3.scaleLinear()
+    .domain([-1, 1])
+    .range([height, 0]);
+
+rec1 = svg.append('g');
+rec2 = svg.append('g');
+    rec1.selectAll("rec1")
+       .data(dataset)
+       .enter()
+       .append("rect")
+       .attr("class", "bar--negative")
+       //.attr("x", 20)
+       .attr("y", function(d) {
+            return ((height/2) - d*4) + 20;  //Height minus data value
+       })
+       .attr("width", width / dataset.length - 2)
+       .attr("x", function(d, i) {
+            return (i * (width / dataset.length)) + 40;
+        })
+      //  .attr('transform', 'translate(0, 100)')
+      //  .transition()
+      //  .delay(function(d, i) {
+      //     return i * 50;
+      //  })
+      //  .duration(dataset.length * 50)
+      //  .attr('transform', 'translate(0, 0)')
+       .attr("height", function(d) {
+            return (d * 4);  // <-- Times four!
+       });
+
+       rec2.selectAll("rec2")
+          .data(dataset)
+          .enter()
+          .append("rect")
+              .attr("clip-path", "url(#clip)")
+          .attr("class", "bar--negativea")
+          //.attr("x", 20)
+          .attr("y", function(d) {
+               return height/2 + 20;  //Height minus data value
+          })
+          .attr("width", width / dataset.length - 2)
+          .attr("x", function(d, i) {
+               return (i * (width / dataset.length)) + 40;
+           })
+                    .attr("height", function(d) {
+               return (d * 4);  // <-- Times four!
+          });
+
+          draw_rect()
+
+
+g.append("defs").append("clipPath")
+    .attr("id", "clip")
+  .append("rect")
+    .attr("width", width)
+    .attr("height", height);
+
+g.append("g")
+    .attr("class", "axis axis--x")
+    .attr("transform", "translate(0," + y(0) + ")")
+    .call(d3.axisBottom(x));
+
+g.append("g")
+    .attr("class", "axis axis--y")
+    .call(d3.axisLeft(y));
+
+
+// function callback(){
+//
+// }
+
+function draw_rect(){
+
+  console.log("Hi")
+  rec2.selectAll("rect").remove()
+
+  dataset.push(random());
+
+
+  rec2.selectAll('rect')
+  .data(dataset)
+  .enter()
+  .append("rect")
+      .attr("clip-path", "url(#clip)")
+  .attr("class", "bar--negativea")
+
+  //.attr("x", 20)
+  .attr("y", function(d) {
+       return height/2 + 20;  //Height minus data value
+  })
+  .attr("width", width / (dataset.length -1) - 7)
+  .attr("x", function(d, i) {
+       return (i * (width / dataset.length - 1)) + 200;
+   })
+   .attr("height", function(d) {
+        return (d * 4);  // <-- Times four!
+   })
+
+    .transition()
+      .duration(100)
+      .attr("x", function(d, i) {
+           return ((i * (width / dataset.length - 1)) + 30);
+       })
+
+      //.on('end', draw_rect);
+      //
+  //  // Pop the old data point off the front.
+   dataset.shift()
+
+
+
+}
+
+</script>
