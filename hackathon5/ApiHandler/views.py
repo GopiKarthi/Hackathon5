@@ -29,7 +29,7 @@ def CustData(request):
     data=[]
 
     for i in range(40):
-        data.append({'date' : randomDate('1-JAN-16', '31-DEC-16', random.random()),
+        data.append({'date' : randomDate('1-Jan-16', '31-Dec-16', random.random()),
                      'close' : (random.random() * 500 )})
 
 

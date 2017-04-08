@@ -126,5 +126,5 @@ def strTimeProp(start, end, format, prop):
 
 
 def randomDate(start, end, prop):
-    return strTimeProp(start, end, '%d-%M-%y', prop)
+    return strTimeProp(start, end, '%d-%b-%y', prop)
 
