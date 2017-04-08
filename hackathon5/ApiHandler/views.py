@@ -9,7 +9,7 @@ from util.util import *
 from hackathon5 import *
 import simplejson
 import sys
-sys.path.append("/host/DataHack")
+sys.path.append("/host/hackathon/hack4_0/Hackathon5/")
 
 def AppRateReal(request):
     """To calculate and return the Application rate
@@ -37,8 +37,8 @@ def CustData(request):
     #                  'close' : (random.random() * 500 )})
 
     for year in range(2009,int(request.GET.get("y"))+1):
-        with open("/host/DataHack/LoanBooked_"+str(year)+".pkl", 'rb') as f:
-            datas = pickle.load(f) + datas
+        with open("/host/hackathon/hack4_0/Hackathon5/LoanBooked_"+str(year)+".pkl", 'rb') as f:
+            datas = pickle.load(f)
     return HttpResponse(json.dumps(datas))
 
 
