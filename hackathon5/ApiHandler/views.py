@@ -43,4 +43,3 @@ def Map_Plot(request):
         points = pickle.load(f)
     coords = get_coordinates(points)
     return coords
->>>>>>> 8a081bde802b59d429dccaac0860a25cb5b323e3
