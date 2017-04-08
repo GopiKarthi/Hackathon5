@@ -28,14 +28,20 @@ class dbconnect(object):
 def plot_points(IPs,ip_data):
     plot_points = []
     for i,j in enumerate(IPs.itertuples(index=True),1):
-        input_ip = int(IPAddress(j[1]))
-        for m,n in enumerate(ip_data.itertuples(index=True),1):
-            start_ip = int(IPAddress(n[1]))
-            end_ip = int(IPAddress(n[2]))
-            if start_ip < input_ip < end_ip:
-                plot_points.append([n[8],n[9],j[1],j[2],j[3],j[4]])
-                print j[5]
-                break
+        try:
+            input_ip = int(IPAddress(j[1]))
+            for m,n in enumerate(ip_data.itertuples(index=True),1):
+                try:
+                    start_ip = int(IPAddress(n[1]))
+                    end_ip = int(IPAddress(n[2]))
+                    if start_ip < input_ip < end_ip:
+                        plot_points.append([n[8],n[9],j[1],j[2],j[3],j[4]])
+                        print j[5]
+                        break
+                except:
+                    pass
+        except:
+            pass
     return plot_points
 
 def get_coordinates(points):

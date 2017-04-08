@@ -3,7 +3,7 @@
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-PROJECT_ROOT = '/host/hackathon/hack4_0/Hackathon5/hackathon5'
+PROJECT_ROOT = '/host/DataHack/hackathon5'
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
