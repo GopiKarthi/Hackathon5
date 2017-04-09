@@ -12,12 +12,12 @@ function say_welcome(){
                             .attr('id', 'WelcomeWrap');
 
     var mylabel = welcome_wrap.append('text')
-                    .attr('x', base_width/2)
+                    .attr('x', (base_width/2)-250)
                     .attr('y', -5)
                     .attr('text-anchor', 'middle')
                     .attr('font-size', '50px')
                     .attr('class', 'wel_text')
-                    .text('WELCOME')
+                    .text('Lending Stream through the Ages')
                             .transition()
                                 .duration(2000)
                                 .attr('y', base_height/2);
@@ -199,7 +199,7 @@ function create_year_screen(callback){
 
         setTimeout(function () {
             start(y+1); 
-        }, 2000);     
+        }, 5000);     
     }
     create_svgs();
     start(y = 2009, callback);
@@ -233,7 +233,7 @@ function create_map_screen(year) {
                     name: "united_kingdom"
                 }
             });
-            var svg = d3.select("svg").attr('width','1000').attr('height','1400');
+            var svg = d3.select("svg").attr('width','750').attr('height','1000');
             $.ajax({
         url:'/api/map-points/',
             type:'GET',
@@ -242,13 +242,15 @@ function create_map_screen(year) {
             {
                 var data = JSON.parse(data);
                 svg.selectAll('circle').data(data.coords).enter().append('circle').attr('cx',function(d) { return d[0];}).attr('cy',function(d) { return d[1];}).attr('r','0').attr('fill',function(d) {if (d[3]=='Male'){return "#00aeef";} else {return "#8dc63f";}}).attr('stroke',function(d) {if (d[3]=='Male'){return "navy";} else {return "olive";}}).transition().delay(function(d,i){ return 100*i; }).duration(500).attr('r','10').transition().delay(function(d,i){ return 100*i; }).duration(100).attr('r','5');
+                svg.append('rect').attr('x','10').attr('y','1105').attr('width','235').attr('height','150').attr('fill','white').attr('stroke','black');
                 svg.append('circle').attr('fill','#00aeef').attr('stroke','navy').attr('r','5').attr('cx','40').attr('cy','1166');
                 svg.append('circle').attr('fill','#8dc63f').attr('stroke','olive').attr('r','5').attr('cx','40').attr('cy','1204');
                 svg.append('text').text('LEGEND').attr('x','83').attr('y','1140');
                 svg.append('text').text('Male Customers').attr('x','60').attr('y','1171');
                 svg.append('text').text('Female Customers').attr('x','60').attr('y','1210');
                 svg.append('rect').attr('x','10').attr('y','1105').attr('width','235').attr('height','150').attr('fill','none').attr('stroke','black');
-                svg.append('text').text(year).attr('x','445').attr('y','120').style('font-size','52px').style('color','blue');
+                svg.append('rect').attr('x','425').attr('y','70').attr('width','135').attr('height','70').attr('fill','white').attr('stroke','black');
+                svg.append('text').text(year).attr('x','445').attr('y','120').style('font-size','52px');
         }
         });
         
