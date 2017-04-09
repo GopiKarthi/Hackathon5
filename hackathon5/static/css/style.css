@@ -37,6 +37,13 @@ svg{
     margin: 30px;
     float: right;
 }
+#svgrating {
+    margin: 30px;
+    float: right;
+    width: 50%;
+    height: 372px;
+    margin-top: 0px;
+}
 
 
 .wel_text{
