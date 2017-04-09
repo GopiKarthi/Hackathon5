@@ -210,7 +210,6 @@ function create_year_screen(callback){
 
     function start(y){
         if(y > 2017){
-            console.log(callback);
             callback();
             return
         }
@@ -233,7 +232,7 @@ function base_map(callback) {
 var callback = callback
 function iter_map(year) {
     if (year>2016) {
-        callback();
+        create_year_screen(base_map);
         return
     }
     create_map_screen(year);
