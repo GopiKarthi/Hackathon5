@@ -42,10 +42,10 @@ def CustData(request):
     accum = 0.0
     profit = 0.0
     for i in datas:
-    		accum=accum+i["Loans"]
-            profit=profit+i["DebitCredit"]
-    		i["Loans"] = accum
-            i["profit"] = profit-accum*150 # 150 is avg cost for one loan
+        accum=accum+i["Loans"]
+        profit=profit+i["DebitCredit"]
+        i["Loans"] = accum
+        i["profit"] = profit-accum*150 # 150 is avg cost for one loan
     return HttpResponse(json.dumps(datas))
 
 
