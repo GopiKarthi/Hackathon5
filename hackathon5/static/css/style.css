@@ -33,6 +33,7 @@ svg{
     height: 900px;
 }
 
+
 #svgreview{
     margin: 30px;
     float: right;
@@ -59,6 +60,8 @@ svg{
 }
 
 .line{
-    stroke: #000;
+    stroke: #00aeef;
     fill: none;
+    stroke-linecap: "round";
+    stroke-width: 6;
 }

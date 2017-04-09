@@ -7,7 +7,6 @@ var svg = d3.select('body').append('svg')
 
 
 function say_welcome(){
-
     var welcome_wrap = svg.append('g')
                             .attr('id', 'WelcomeWrap');
 
@@ -117,7 +116,9 @@ function create_year_screen(callback){
     .append("g")
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")");
-
+    svg.append('text').text('Time').attr('x','700').attr('y','440').style('font-size','22px;');
+    svg.append('text').text('Net Loan Amount').attr('x','20').attr('y','200').style('font-size','22px;');
+    svg.append('text').text('Growth Worm').attr('x','400').attr('y','280').style('font-size','22px;');
     // format the data
     data  = JSON.parse(response.response)
     data.forEach(function(d) {
