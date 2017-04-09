@@ -60,6 +60,7 @@ function create_year_screen(callback){
     var svg_screen;
     var svg_review;
     var year_title;
+    var svg_rating;
 
     function create_svgs(){
 
@@ -77,6 +78,8 @@ function create_year_screen(callback){
 
         svg_review = cont.append('svg')
                     .attr('id', 'svgReview');
+        svg_rating = cont.append('svg')
+                    .attr('id', 'svgRating');
 
     }
     function customer_flow(yr){
@@ -183,6 +186,24 @@ function create_year_screen(callback){
                         .attr('opacity', 1);
 
     }
+    function rating(y){
+
+        svg_rating.selectAll('image')
+                    .transition()
+                    .duration(2000)
+                    .attr('opacity', 0)
+                    .remove();
+
+        svg_rating.append("image")
+                    .attr('xlink:href', '/static/img/rev_'+ y +'.png')
+                    .attr('x', 5)
+                    .attr('y', 5)
+                    .attr('opacity', 0)
+                        .transition()
+                        .duration(2000)
+                        .attr('opacity', 1);
+
+    }
 
 
 
@@ -196,10 +217,11 @@ function create_year_screen(callback){
         title(y);
         screen(y);
         customer_flow(y);
+        rating(y);
 
         setTimeout(function () {
             start(y+1); 
-        }, 5000);     
+        }, 10000);     
     }
     create_svgs();
     start(y = 2009, callback);
@@ -216,7 +238,7 @@ function iter_map(year) {
     create_map_screen(year);
     setTimeout(function () {
         iter_map(year+1);
-    }, 10000);
+    }, 12000);
 }
 iter_map(year=2009,callback);
 }
@@ -251,6 +273,10 @@ function create_map_screen(year) {
                 svg.append('rect').attr('x','10').attr('y','1105').attr('width','235').attr('height','150').attr('fill','none').attr('stroke','black');
                 svg.append('rect').attr('x','425').attr('y','70').attr('width','135').attr('height','70').attr('fill','white').attr('stroke','black');
                 svg.append('text').text(year).attr('x','445').attr('y','120').style('font-size','52px');
+                svg.append('text').text("% males").attr('x','80').attr('y','200').style('font-size','52px');
+                svg.append('text').text(data.male).attr('x','92').attr('y','255').style('font-size','52px');
+                svg.append('text').text("% females").attr('x','760').attr('y','200').style('font-size','52px');
+                svg.append('text').text(data.female).attr('x','790').attr('y','255').style('font-size','52px');
         }
         });
         
