@@ -37,15 +37,20 @@ def CustData(request):
     #                  'close' : (random.random() * 500 )})
 
     # for year in range(2009,int(request.GET.get("y"))+1):
-    with open("/host/DataHack/LoanBooked_"+request.GET.get("y")+".pkl", 'rb') as f:
+    year = request.GET.get("y")
+    with open("/host/DataHack/LoanBooked_2017.pkl", 'rb') as f:
         datas = pickle.load(f)
     accum = 0.0
     profit = 0.0
     for i in datas:
-    		accum=accum+i["Loans"]
+            accum=accum+i["Loans"]
             profit=profit+i["DebitCredit"]
-    		i["Loans"] = accum
+            i["Loans"] = accum
             i["profit"] = profit-accum*150 # 150 is avg cost for one loan
+            t = time.strptime(i['date'], '%d-%b-%y')
+            now = datetime.date(int(year), 1, 1)
+            if t.tm_year>=now.year:
+    		i["Loans"],i["profit"] = None,None
     return HttpResponse(json.dumps(datas))
 
 

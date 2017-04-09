@@ -5,6 +5,7 @@ from pickle import *
 from utilities import dbconnect
 import datetime
 import sys
+import time
 sys.path.append("/host/DataHack")
 conTMS=dbconnect("TMS_Data")
 conUKLSOFT=dbconnect("uklsoft")
@@ -52,8 +53,6 @@ def CustMothlyData(year=2009):
     # import pdb;pdb.set_trace()
     with open("LoanBooked_"+dateYYYYMM.strftime("%Y")+".pkl","wb") as f:
         pickle.dump(MonthlyLoans, f)
-    with open("LoanBooked_"+dateYYYYMM.strftime("%Y")+".pkl", 'rb') as f:
-        points = pickle.load(f)
     return MonthlyLoans
 
 
@@ -70,11 +69,18 @@ with open("/host/DataHack/LoanBooked_2017.pkl", 'rb') as f:
 accum = 0.0
 profit = 0.0
 for i in datas:
-		import pdb;pdb.set_trace()
 		accum=accum+i["Loans"]
 		profit=profit+i["DebitCredit"]
 		i["Loans"] = accum
 		i["profit"] = profit-accum*150 # 150 is avg cost for one loan
+		t = time.strptime(i['date'], '%d-%b-%y')
+		now = datetime.date(2016, 1, 1)
+		if t.tm_year>=now.year:
+				i["Loans"],i["profit"] = 0,0
+
+import pdb;pdb.set_trace()
+print datas
+
 # accum = 0.0
 # for i in datas:
 # 		accum=accum+i["Loans"]
