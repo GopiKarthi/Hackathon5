@@ -39,6 +39,10 @@ def CustData(request):
     for year in range(2009,int(request.GET.get("y"))+1):
         with open("/host/hackathon/hack4_0/Hackathon5/LoanBooked_"+str(year)+".pkl", 'rb') as f:
             datas = pickle.load(f)
+    accum = 0.0
+    for i in datas:
+    		accum=accum+i["Loans"]
+    		i["Loans"] = accum
     return HttpResponse(json.dumps(datas))
 
 

@@ -60,7 +60,12 @@ def CustMothlyData(year=2009):
 datas=[]
 for year in range(2009,2018):
 	with open("/host/DataHack/LoanBooked_"+str(year)+".pkl", 'rb') as f:
-		import pdb;pdb.set_trace()
 		datas = pickle.load(f) + datas
+accum = 0.0
+for i in datas:
+		accum=accum+i["Loans"]
+		i["Loans"] = accum
+
+import pdb;pdb.set_trace()
 print datas
 #print MonthlyLoans
