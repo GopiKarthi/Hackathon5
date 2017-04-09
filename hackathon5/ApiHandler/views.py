@@ -54,4 +54,16 @@ def MapPlot(request):
     with open(plot_map[year], 'rb') as f:
         points = pickle.load(f)
     coords = get_coordinates(points)
-    return HttpResponse(simplejson.dumps({'coords':coords}))
+    male = 0
+    female = 0
+    for i in coords:
+        if i[3] == 'Male':
+            male = male + 1
+        else:
+            female = female + 1
+    total_cust = male + female
+    male_percent = (float(male)/float(total_cust)) * 100
+    female_percent = (float(female)/float(total_cust)) * 100
+    male_percent = '%.2f' % male_percent
+    female_percent = '%.2f' % female_percent
+    return HttpResponse(simplejson.dumps({'coords':coords,'male':str(male_percent)+'%','female':str(female_percent)+'%'}))
